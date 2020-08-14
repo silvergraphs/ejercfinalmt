@@ -4,7 +4,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
+
+import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -68,7 +72,16 @@ export const Home = (props: IHomeProp) => {
     setValue(newValue);
   };
 
+  const tema = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#2a699d',
+      },
+    },
+  });
+
   return (
+    <ThemeProvider theme={tema}>
     <div>
       
         <h2>
@@ -115,6 +128,7 @@ export const Home = (props: IHomeProp) => {
 
       
     </div>
+    </ThemeProvider>
   );
 };
 
