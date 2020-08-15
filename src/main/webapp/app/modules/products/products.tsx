@@ -13,6 +13,9 @@ import Box from '@material-ui/core/Box';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
 
+// Componente que muestra los productos
+import Product from './product-list'
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
@@ -89,13 +92,13 @@ export const Products = () => {
    </Tabs>
  </AppBar>
  <TabPanel value={value} index={0}>
-   Pedidos encargados
+   <Product list="incharge"/>
  </TabPanel>
  <TabPanel value={value} index={1}>
-   Pedidos enviados
+ <Product list="shipped"/>
  </TabPanel>
  <TabPanel value={value} index={2}>
-   Pedidos entregados
+ <Product list="delivered"/>
  </TabPanel>
 </div>
 </ThemeProvider>
