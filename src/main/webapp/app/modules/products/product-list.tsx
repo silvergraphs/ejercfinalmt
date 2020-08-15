@@ -15,21 +15,74 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(id: number, product: string) {
-  return { id, product, status };
+function fetchProduct(id:number) {
+    const productData = [
+        {
+        "id": 1,
+        "name": "Generic Steel Tuna"
+        }
+    ]
+    return productData.map((pData) => (pData.name))
 }
-
-const rows = [
-  createData(1, 'Lorem ipsum'),
-  createData(1, 'Lorem ipsum'),
-  createData(1, 'Lorem ipsum'),
-  createData(1, 'Lorem ipsum'),
-  createData(1, 'Lorem ipsum'),
+   
+const salesData = [
+        {
+          "id": 2,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 3,
+          "state": "DELIVERED",
+          "product": null
+        },
+        {
+          "id": 4,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 5,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 6,
+          "state": "IN_CHARGE",
+          "product": null
+        },
+        {
+          "id": 7,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 8,
+          "state": "IN_CHARGE",
+          "product": null
+        },
+        {
+          "id": 9,
+          "state": "IN_CHARGE",
+          "product": null
+        },
+        {
+          "id": 10,
+          "state": "IN_CHARGE",
+          "product": null
+        },
+        {
+          "id": 1,
+          "state": "SHIPPED",
+          "product": null
+        }
 ];
 
 export default function Product(props) {
   const classes = useStyles();
-    
+  
+  const rows = salesData.filter(row => row.state === props.list)
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -46,7 +99,7 @@ export default function Product(props) {
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
-              <TableCell align="center">{row.product}</TableCell>
+              <TableCell align="center">{fetchProduct(row.id)}</TableCell>
               <TableCell align="right">
                   <Button variant="outlined" color="primary">Enviar</Button>
               </TableCell>

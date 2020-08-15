@@ -92,13 +92,13 @@ export const Products = () => {
    </Tabs>
  </AppBar>
  <TabPanel value={value} index={0}>
-   <Product list="incharge"/>
+   <Product list="IN_CHARGE"/>
  </TabPanel>
  <TabPanel value={value} index={1}>
- <Product list="shipped"/>
+ <Product list="SHIPPED"/>
  </TabPanel>
  <TabPanel value={value} index={2}>
- <Product list="delivered"/>
+ <Product list="DELIVERED"/>
  </TabPanel>
 </div>
 </ThemeProvider>
