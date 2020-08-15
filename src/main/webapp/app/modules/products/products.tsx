@@ -1,9 +1,6 @@
 import React from 'react';
 
-// Colors import 
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
-
+// Componentes de Material UI
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -12,7 +9,6 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
 // Imports para modificar la paleta de colores
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
@@ -76,7 +72,7 @@ export const Products = () => {
   };
 
  return <ThemeProvider theme={tema}>
-   <div className={classes.root}>
+   <div id="products" className={classes.root}>
  <AppBar position="static" color="default">
    <Tabs
      value={value}

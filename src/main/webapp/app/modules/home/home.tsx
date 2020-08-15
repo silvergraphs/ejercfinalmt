@@ -1,5 +1,4 @@
 import './home.scss';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
@@ -12,16 +11,8 @@ export type IHomeProp = StateProps;
 export const Home = (props: IHomeProp) => {
   const { account } = props;
 
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
-
   return (
-    
-    <div>
-      
+    <div id="home">
         <h2>
           Bienvenido a Merlion Techs
         </h2>
