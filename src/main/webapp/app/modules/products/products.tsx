@@ -14,7 +14,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles';
 
 // Componente que muestra los productos
-import Product from './product-list'
+import { Product } from './product-list'
 
 interface TabPanelProps {
   children?: React.ReactNode;

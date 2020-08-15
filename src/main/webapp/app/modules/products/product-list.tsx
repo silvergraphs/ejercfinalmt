@@ -79,10 +79,12 @@ const salesData = [
         }
 ];
 
-export default function Product(props) {
+export const Product = (props) => {
   const classes = useStyles();
   
+  
   const rows = salesData.filter(row => row.state === props.list)
+
 
   return (
     <TableContainer component={Paper}>
