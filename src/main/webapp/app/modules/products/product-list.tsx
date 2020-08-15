@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
 
 const useStyles = makeStyles({
   table: {
@@ -101,7 +102,15 @@ export default function Product(props) {
               </TableCell>
               <TableCell align="center">{fetchProduct(row.id)}</TableCell>
               <TableCell align="right">
+              {props.list === 'IN_CHARGE' ? (
                   <Button variant="outlined" color="primary">Enviar</Button>
+                  ) : props.list === 'SHIPPED' ? (
+                  <Button variant="outlined" color="primary">Entregar</Button>
+                  ) : (
+                   <div>
+                  <Button variant="outlined" color="primary" disabled><CheckIcon/></Button>
+                  </div>
+                    )}
               </TableCell>
             </TableRow>
           ))}
