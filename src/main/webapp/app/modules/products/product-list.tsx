@@ -16,7 +16,11 @@ const useStyles = makeStyles({
   },
 });
 
-function fetchProduct(id:number) {
+export const Product = (props) => {
+  const classes = useStyles();
+
+  // Data 
+  function fetchProduct(id:number) {
     const productData = [
         {
         "id": 1,
@@ -25,8 +29,53 @@ function fetchProduct(id:number) {
     ]
     return productData.map((pData) => (pData.name))
 }
-   
-const salesData = [
+
+let productData = [
+  {
+  "id": 1,
+  "name": "Generic Steel Tuna"
+  }]
+
+let salesData = [
+        {
+          "id": 2,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 3,
+          "state": "DELIVERED",
+          "product": null
+        },
+        {
+          "id": 4,
+          "state": "SHIPPED",
+          "product": null
+        },
+        {
+          "id": 5,
+          "state": "IN_CHARGE",
+          "product": null
+        }
+        
+]
+
+  // Filtro el tipo de producto segun solicite el usuario en la tab
+  salesData = salesData.filter(row => row.state === props.list)
+
+  const data:any = {productData,salesData}
+
+  // Guardo los datos ya filtrados en el estado del componente
+  const [product, setProduct] = React.useState(data);
+
+  // Funcion que actualiza el estado del componente
+  function updateProducts() {
+    productData = [
+      {
+      "id": 1,
+      "name": "Generic Steel Tuna"
+      }]
+    salesData = [
         {
           "id": 2,
           "state": "SHIPPED",
@@ -77,14 +126,10 @@ const salesData = [
           "state": "SHIPPED",
           "product": null
         }
-];
-
-export const Product = (props) => {
-  const classes = useStyles();
-  
-  
-  const rows = salesData.filter(row => row.state === props.list)
-
+]
+    const newData = {productData,salesData}
+    setProduct(newData)
+  } 
 
   return (
     <TableContainer component={Paper}>
@@ -97,15 +142,15 @@ export const Product = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {product.salesData.map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
-                {row.id}
+              {row.id}
               </TableCell>
               <TableCell align="center">{fetchProduct(row.id)}</TableCell>
               <TableCell align="right">
               {props.list === 'IN_CHARGE' ? (
-                  <Button variant="outlined" color="primary">Enviar</Button>
+                  <Button variant="outlined" color="primary" onClick={updateProducts}>Enviar</Button>
                   ) : props.list === 'SHIPPED' ? (
                   <Button variant="outlined" color="primary">Entregar</Button>
                   ) : (
