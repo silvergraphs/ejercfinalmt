@@ -27,18 +27,6 @@ const useStyles = makeStyles({
   },
 });
 
-/* let globalVar = null 
-
-function fetchProduct(id:number) {
-  axios.get('api/products/'+id.toString())
-  .then(function (response) {
-    globalVar = response.data.name
-  })
-  return globalVar
-  globalVar = null 
-   productData.map((pData) => (pData.name)) 
-} */
-
 export const Product = (props) => {
   const classes = useStyles();
 
@@ -63,38 +51,6 @@ export const Product = (props) => {
        setProductList(filteredData)
     })) 
   }, [])
-
-
-
-/* React.useEffect(() => {
-  axios.get('api/sales')
-  .then(function (response) {
-    console.log(response.data[0].name)
-  })
-}, []) */
-
-
- /*  // Guardo los datos ya filtrados en el estado del componente
-  const [product, setProduct] = React.useState(data); */
-
-  // Funcion que actualiza el estado del componente
-/*   function updateProducts() {
-    productData = [
-      {
-      "id": 1,
-      "name": "Generic Steel Tuna"
-      }]
-    salesData = [
-        {
-          "id": 3,
-          "state": "SHIPPED",
-          "product": null
-        }
-] 
-    salesData = salesData.filter(row => row.state === props.list)
-    const newData = {productData,salesData}
-    setProduct(newData)
-  }  */
 
   return (
     <TableContainer component={Paper}>
