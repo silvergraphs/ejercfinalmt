@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,66 +11,74 @@ import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 
+// Autenticacion con la API
+axios.post('/api/authenticate', {
+  password: 'admin',
+  rememberMe: false,
+  username: 'admin'
+})
+.then(function (response) {
+  const apiToken = response.data.id_token;
+})
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
 
+/* let globalVar = null 
+
+function fetchProduct(id:number) {
+  axios.get('api/products/'+id.toString())
+  .then(function (response) {
+    globalVar = response.data.name
+  })
+  return globalVar
+  globalVar = null 
+   productData.map((pData) => (pData.name)) 
+} */
+
 export const Product = (props) => {
   const classes = useStyles();
 
-  // Data 
-  function fetchProduct(id:number) {
-    const productData = [
-        {
-        "id": 1,
-        "name": "Generic Steel Tuna"
-        }
-    ]
-    return productData.map((pData) => (pData.name))
-}
+  const [productList, setProductList] = React.useState([])
 
-let productData = [
-  {
-  "id": 1,
-  "name": "Generic Steel Tuna"
-  }]
+  React.useEffect(() => {
 
-let salesData = [
-        {
-          "id": 2,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
-          "id": 3,
-          "state": "DELIVERED",
-          "product": null
-        },
-        {
-          "id": 4,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
-          "id": 5,
-          "state": "IN_CHARGE",
-          "product": null
-        }
-        
-]
+    
+    const products = "http://localhost:9000/api/products"
+    const sales = "http://localhost:9000/api/sales"
+    
+    const productsRequest = axios.get(products);
+    const salesRequest = axios.get(sales);
+    
+    axios.all([productsRequest, salesRequest]).then(axios.spread((...responses) => {
+      const pReq = responses[0]
+      const sReq = responses[1]
+      
+      
+       // Filtro el tipo de producto segun solicite el usuario en la tab
+       const filteredData = sReq.data.filter(row => row.state === props.list)
+       setProductList(filteredData)
+    })) 
+  }, [])
 
-  // Filtro el tipo de producto segun solicite el usuario en la tab
-  salesData = salesData.filter(row => row.state === props.list)
 
-  const data:any = {productData,salesData}
 
-  // Guardo los datos ya filtrados en el estado del componente
-  const [product, setProduct] = React.useState(data);
+/* React.useEffect(() => {
+  axios.get('api/sales')
+  .then(function (response) {
+    console.log(response.data[0].name)
+  })
+}, []) */
+
+
+ /*  // Guardo los datos ya filtrados en el estado del componente
+  const [product, setProduct] = React.useState(data); */
 
   // Funcion que actualiza el estado del componente
-  function updateProducts() {
+/*   function updateProducts() {
     productData = [
       {
       "id": 1,
@@ -77,59 +86,15 @@ let salesData = [
       }]
     salesData = [
         {
-          "id": 2,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
           "id": 3,
-          "state": "DELIVERED",
-          "product": null
-        },
-        {
-          "id": 4,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
-          "id": 5,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
-          "id": 6,
-          "state": "IN_CHARGE",
-          "product": null
-        },
-        {
-          "id": 7,
-          "state": "SHIPPED",
-          "product": null
-        },
-        {
-          "id": 8,
-          "state": "IN_CHARGE",
-          "product": null
-        },
-        {
-          "id": 9,
-          "state": "IN_CHARGE",
-          "product": null
-        },
-        {
-          "id": 10,
-          "state": "IN_CHARGE",
-          "product": null
-        },
-        {
-          "id": 1,
           "state": "SHIPPED",
           "product": null
         }
-]
+] 
+    salesData = salesData.filter(row => row.state === props.list)
     const newData = {productData,salesData}
     setProduct(newData)
-  } 
+  }  */
 
   return (
     <TableContainer component={Paper}>
@@ -142,15 +107,15 @@ let salesData = [
           </TableRow>
         </TableHead>
         <TableBody>
-          {product.salesData.map((row) => (
-            <TableRow key={row.id}>
+          {productList.map(product => (
+            <TableRow key={product.id}>
               <TableCell component="th" scope="row">
-              {row.id}
+              {product.id}
               </TableCell>
-              <TableCell align="center">{fetchProduct(row.id)}</TableCell>
+              <TableCell align="center">Product Name</TableCell>
               <TableCell align="right">
               {props.list === 'IN_CHARGE' ? (
-                  <Button variant="outlined" color="primary" onClick={updateProducts}>Enviar</Button>
+                  <Button variant="outlined" color="primary" /* onClick={updateProducts} */>Enviar</Button>
                   ) : props.list === 'SHIPPED' ? (
                   <Button variant="outlined" color="primary">Entregar</Button>
                   ) : (
