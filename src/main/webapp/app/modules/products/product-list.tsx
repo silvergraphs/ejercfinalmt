@@ -31,10 +31,11 @@ export const Product = (props) => {
   const [productList, setProductList] = React.useState([[],[]])
 
   React.useEffect(() => {
-
+    // URL de las API
     const products = "http://localhost:9000/api/products"
     const sales = "http://localhost:9000/api/sales"
     
+    // Se realiza la peticion GET
     const productsRequest = axios.get(products);
     const salesRequest = axios.get(sales);
     
@@ -42,22 +43,23 @@ export const Product = (props) => {
       const pReq = responses[0]
       const sReq = responses[1]
 
-       // Filtro el tipo de producto segun solicite el usuario en la tab
+       // Se filtra el tipo de producto en un array segun solicite el usuario en el TabMenu
        const filteredSales = sReq.data.filter(row => row.state === props.list)
-       const filteredProducts = []
 
+       // Se crea el array para la lista con los nombres de los productos
+       const filteredProducts = []
         filteredSales.map((salesData) => {
           const prodId = salesData.id
           pReq.data.map((productData) => {
             if (prodId === productData.id) {
                filteredProducts.push(productData) 
+               // Se agregan los productos que coincidan con los datos filtrados en filteredSales a este nuevo array
             }
           })
        })  
       
        const filteredData = [filteredSales,filteredProducts]
-
-       setProductList(filteredData)
+       setProductList(filteredData) // Se envia toda la informacion filtrada al estado del componente
     })) 
   }, [])
 
