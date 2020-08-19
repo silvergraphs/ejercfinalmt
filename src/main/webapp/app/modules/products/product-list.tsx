@@ -14,13 +14,11 @@ import CheckIcon from '@material-ui/icons/Check';
 // Autenticacion con la API
 axios.post('/api/authenticate', {
   password: 'admin',
-  rememberMe: false,
+  rememberMe: true,
   username: 'admin'
 })
-.then(function (response) {
-  const apiToken = response.data.id_token;
-})
 
+// Uso de estilos
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -30,11 +28,10 @@ const useStyles = makeStyles({
 export const Product = (props) => {
   const classes = useStyles();
 
-  const [productList, setProductList] = React.useState([])
+  const [productList, setProductList] = React.useState([[],[]])
 
   React.useEffect(() => {
 
-    
     const products = "http://localhost:9000/api/products"
     const sales = "http://localhost:9000/api/sales"
     
@@ -44,13 +41,26 @@ export const Product = (props) => {
     axios.all([productsRequest, salesRequest]).then(axios.spread((...responses) => {
       const pReq = responses[0]
       const sReq = responses[1]
-      
-      
+
        // Filtro el tipo de producto segun solicite el usuario en la tab
-       const filteredData = sReq.data.filter(row => row.state === props.list)
+       const filteredSales = sReq.data.filter(row => row.state === props.list)
+       const filteredProducts = []
+
+        filteredSales.map((salesData) => {
+          const prodId = salesData.id
+          pReq.data.map((productData) => {
+            if (prodId === productData.id) {
+               filteredProducts.push(productData) 
+            }
+          })
+       })  
+      
+       const filteredData = [filteredSales,filteredProducts]
+
        setProductList(filteredData)
     })) 
   }, [])
+
 
   return (
     <TableContainer component={Paper}>
@@ -63,15 +73,15 @@ export const Product = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {productList.map(product => (
+          {productList[1].map(product => (
             <TableRow key={product.id}>
               <TableCell component="th" scope="row">
               {product.id}
               </TableCell>
-              <TableCell align="center">Product Name</TableCell>
+          <TableCell align="center">{product.name}</TableCell>
               <TableCell align="right">
               {props.list === 'IN_CHARGE' ? (
-                  <Button variant="outlined" color="primary" /* onClick={updateProducts} */>Enviar</Button>
+                  <Button variant="outlined" color="primary">Enviar</Button>
                   ) : props.list === 'SHIPPED' ? (
                   <Button variant="outlined" color="primary">Entregar</Button>
                   ) : (
