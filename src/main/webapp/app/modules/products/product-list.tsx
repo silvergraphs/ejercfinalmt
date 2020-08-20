@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Autenticacion con la API
@@ -25,6 +25,11 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  emptyProducts: {
+    padding: '20px',
+    fontSize: '0.875rem',
+    textAlign: 'center',
+  }
 });
 
 export const Product = (props) => {
@@ -85,11 +90,12 @@ export const Product = (props) => {
 
   return (
     <TableContainer component={Paper}>
+      {productList[1].length === 0 ? <div className={classes.emptyProducts}>No hay productos para mostrar</div> : 
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="center">Producto</TableCell>
+            <TableCell><strong>ID</strong></TableCell>
+            <TableCell align="center"><strong>Producto</strong></TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
@@ -106,15 +112,13 @@ export const Product = (props) => {
                   ) : props.list === 'SHIPPED' ? (
                   <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'DELIVERED')}>Entregar</Button>
                   ) : (
-                   <div>
                   <Button variant="outlined" color="primary" disabled><CheckIcon/></Button>
-                  </div>
                     )}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
-    </TableContainer>
+      </Table> }
+    </TableContainer> 
   );
 }
