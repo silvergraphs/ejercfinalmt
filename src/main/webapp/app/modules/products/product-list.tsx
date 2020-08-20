@@ -17,8 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 axios.post('/api/authenticate', {
   password: 'admin',
   rememberMe: true,
-  username: 'admin'
-})
+  username: 'admin',
+});
 
 // Uso de estilos
 const useStyles = makeStyles({
@@ -29,96 +29,112 @@ const useStyles = makeStyles({
     padding: '20px',
     fontSize: '0.875rem',
     textAlign: 'center',
-  }
+  },
 });
 
-export const Product = (props) => {
+export const Product = props => {
   const classes = useStyles();
 
-  const [productList, setProductList] = React.useState([[],[]])
+  const [productList, setProductList] = React.useState([[], []]);
 
   const callApi = () => {
     // URL de las API
-    const products = "/api/products"
-    const sales = "/api/sales"
-    
+    const products = '/api/products';
+    const sales = '/api/sales';
+
     // Se realiza la peticion GET
     const productsRequest = axios.get(products);
     const salesRequest = axios.get(sales);
-    
-    axios.all([productsRequest, salesRequest]).then(axios.spread((...responses) => {
-      const pReq = responses[0]
-      const sReq = responses[1]
 
-       // Se filtra el tipo de producto en un array segun solicite el usuario en el TabMenu
-       const filteredSales = sReq.data.filter(row => row.state === props.list)
+    axios.all([productsRequest, salesRequest]).then(
+      axios.spread((...responses) => {
+        const pReq = responses[0];
+        const sReq = responses[1];
 
-       // Se crea el array para la lista con los nombres de los productos
-       const filteredProducts = []
-        filteredSales.map((salesData) => {
-          const prodId = salesData.id
-          pReq.data.map((productData) => {
+        // Se filtra el tipo de producto en un array segun solicite el usuario en el TabMenu
+        const filteredSales = sReq.data.filter(row => row.state === props.list);
+
+        // Se crea el array para la lista con los nombres de los productos
+        const filteredProducts = [];
+        filteredSales.map(salesData => {
+          const prodId = salesData.id;
+          pReq.data.map(productData => {
             if (prodId === productData.id) {
-               filteredProducts.push(productData) 
-               // Se agregan los productos que coincidan con los datos filtrados en filteredSales a este nuevo array
+              filteredProducts.push(productData);
+              // Se agregan los productos que coincidan con los datos filtrados en filteredSales a este nuevo array
             }
-          })
-       })  
-      
-       const filteredData = [filteredSales,filteredProducts]
-       setProductList(filteredData) // Se envia toda la informacion filtrada al estado del componente
-    })) 
- }
+          });
+        });
+
+        const filteredData = [filteredSales, filteredProducts];
+        setProductList(filteredData); // Se envia toda la informacion filtrada al estado del componente
+      })
+    );
+  };
 
   React.useEffect(() => {
-    callApi()
-  }, [props.list])
+    callApi();
+  }, [props.list]);
 
-  const moveProduct = (productId,newState) => {
-    axios.put('/api/sales', {
-      id: productId.toString(),
-      state: newState
-    })
-    .then(function () {
-      toast.success("Producto movido 👌")
-      callApi()
-    })
-    .catch(function () {
-      toast.error("Error al mover el producto")
-    });
-  }
+  const moveProduct = (productId, newState) => {
+    axios
+      .put('/api/sales', {
+        id: productId.toString(),
+        state: newState,
+      })
+      .then(function () {
+        toast.success('Producto movido 👌');
+        callApi();
+      })
+      .catch(function () {
+        toast.error('Error al mover el producto');
+      });
+  };
 
   return (
     <TableContainer component={Paper}>
-      {productList[1].length === 0 ? <div className={classes.emptyProducts}>No hay productos para mostrar</div> : 
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell><strong>ID</strong></TableCell>
-            <TableCell align="center"><strong>Producto</strong></TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {productList[1].map(product => (
-            <TableRow key={product.id}>
-              <TableCell component="th" scope="row">
-              {product.id}
+      {productList[1].length === 0 ? (
+        <div className={classes.emptyProducts}>No hay productos para mostrar</div>
+      ) : (
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <strong>ID</strong>
               </TableCell>
-          <TableCell align="center">{product.name}</TableCell>
-              <TableCell align="right">
-              {props.list === 'IN_CHARGE' ? (
-                  <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'SHIPPED')}>Enviar</Button>
-                  ) : props.list === 'SHIPPED' ? (
-                  <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'DELIVERED')}>Entregar</Button>
-                  ) : (
-                  <Button variant="outlined" color="primary" disabled><CheckIcon/></Button>
-                    )}
+              <TableCell align="center">
+                <strong>Producto</strong>
               </TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table> }
-    </TableContainer> 
+          </TableHead>
+          <TableBody>
+            {productList[1].map(product => (
+              <TableRow key={product.id}>
+                <TableCell component="th" scope="row">
+                  {product.id}
+                </TableCell>
+                <TableCell align="center">{product.name}</TableCell>
+                <TableCell align="right">
+                  {props.list === 'IN_CHARGE' ? (
+                    <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'SHIPPED')}>
+                      Enviar
+                    </Button>
+                  ) : props.list === 'SHIPPED' ? (
+                    <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'DELIVERED')}>
+                      Entregar
+                    </Button>
+                  ) : (
+                    <Button variant="outlined" color="primary" disabled>
+                      <CheckIcon />
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </TableContainer>
   );
-}
+};
