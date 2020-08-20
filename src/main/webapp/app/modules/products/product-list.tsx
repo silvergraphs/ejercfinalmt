@@ -10,6 +10,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Autenticacion con la API
 axios.post('/api/authenticate', {
@@ -61,8 +63,20 @@ export const Product = (props) => {
        const filteredData = [filteredSales,filteredProducts]
        setProductList(filteredData) // Se envia toda la informacion filtrada al estado del componente
     })) 
-  }, [])
+  }, [props.list])
 
+  const moveProduct = (productId,newState) => {
+    axios.put('/api/sales', {
+      id: productId.toString(),
+      state: newState
+    })
+    .then(function () {
+      toast.success("Producto movido con exito")
+    })
+    .catch(function () {
+      toast.error("Error al mover el producto")
+    });
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -83,9 +97,9 @@ export const Product = (props) => {
           <TableCell align="center">{product.name}</TableCell>
               <TableCell align="right">
               {props.list === 'IN_CHARGE' ? (
-                  <Button variant="outlined" color="primary">Enviar</Button>
+                  <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'SHIPPED')}>Enviar</Button>
                   ) : props.list === 'SHIPPED' ? (
-                  <Button variant="outlined" color="primary">Entregar</Button>
+                  <Button variant="outlined" color="primary" onClick={() => moveProduct(product.id, 'DELIVERED')}>Entregar</Button>
                   ) : (
                    <div>
                   <Button variant="outlined" color="primary" disabled><CheckIcon/></Button>
