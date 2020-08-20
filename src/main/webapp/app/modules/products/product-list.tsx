@@ -32,7 +32,7 @@ export const Product = (props) => {
 
   const [productList, setProductList] = React.useState([[],[]])
 
-  React.useEffect(() => {
+  const callApi = () => {
     // URL de las API
     const products = "http://localhost:9000/api/products"
     const sales = "http://localhost:9000/api/sales"
@@ -63,6 +63,10 @@ export const Product = (props) => {
        const filteredData = [filteredSales,filteredProducts]
        setProductList(filteredData) // Se envia toda la informacion filtrada al estado del componente
     })) 
+ }
+
+  React.useEffect(() => {
+    callApi()
   }, [props.list])
 
   const moveProduct = (productId,newState) => {
@@ -71,7 +75,8 @@ export const Product = (props) => {
       state: newState
     })
     .then(function () {
-      toast.success("Producto movido con exito")
+      toast.success("Producto movido 👌")
+      callApi()
     })
     .catch(function () {
       toast.error("Error al mover el producto")
