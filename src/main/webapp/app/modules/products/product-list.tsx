@@ -39,8 +39,8 @@ export const Product = (props) => {
 
   const callApi = () => {
     // URL de las API
-    const products = "http://localhost:9000/api/products"
-    const sales = "http://localhost:9000/api/sales"
+    const products = "/api/products"
+    const sales = "/api/sales"
     
     // Se realiza la peticion GET
     const productsRequest = axios.get(products);
